@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7fb"><title>Business OS</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+<div id="authScreen" class="auth-wrap">
+  <div class="auth-brand"><div class="logo">B</div><div><strong>Business OS</strong><small>YOUR BUSINESS, IN CONTROL</small></div></div>
+  <div class="auth-card">
+    <div class="auth-heading"><span class="eyebrow">LOCAL BUSINESS WORKSPACE</span><h1 id="authTitle">Welcome back</h1><p id="authSubtitle">Log in to unlock your business data.</p></div>
+    <div class="auth-tabs"><button type="button" class="auth-tab active" data-auth-mode="login">Log in</button><button type="button" class="auth-tab" data-auth-mode="register">Create account</button></div>
+    <form id="loginForm" class="auth-form">
+      <label>Email<input type="email" name="email" autocomplete="username" required placeholder="you@business.com"></label>
+      <label>Password<input type="password" name="password" autocomplete="current-password" required></label>
+      <button class="btn primary full" type="submit">Log in securely</button><p class="form-message" id="loginMessage"></p><button class="text-btn auth-forgot" id="forgotPasswordBtn" type="button">Forgot your password?</button><p class="form-message" id="forgotMessage"></p>
+    </form>
+    <form id="registerForm" class="auth-form" hidden>
+      <label>Your name<input name="owner_name" required maxlength="100" autocomplete="name" placeholder="Your full name"></label>
+      <label>Business name<input name="business_name" required maxlength="120" placeholder="Name shown in Business OS"></label>
+      <label>Business type<select name="business_type" required><option value="">Choose your business type</option><option>Supermarket / Grocery</option><option>Retail shop</option><option>Wholesale</option><option>Restaurant / Cafe</option><option>Pharmacy</option><option>Clothing store</option><option>Hardware store</option><option>Salon / Beauty</option><option>Services</option><option>Other</option></select></label>
+      <label>Currency<select name="currency" id="registerCurrency" required><option value="RWF">RWF — Rwandan franc</option><option value="USD">USD — US dollar</option><option value="EUR">EUR — Euro</option><option value="KES">KES — Kenyan shilling</option><option value="UGX">UGX — Ugandan shilling</option><option value="TZS">TZS — Tanzanian shilling</option></select></label>
+      <label>Email<input type="email" name="email" required autocomplete="email" placeholder="you@business.com"></label>
+      <label>Password <span class="hint">(at least 8 characters)</span><input type="password" name="password" required minlength="8" autocomplete="new-password"></label>
+      <button class="btn primary full" type="submit">Create local account</button><p class="form-message" id="registerMessage"></p>
+    </form>
+    <form id="resetPasswordForm" class="auth-form" hidden><label>New password<input type="password" name="password" required minlength="8" autocomplete="new-password"></label><label>Confirm new password<input type="password" name="confirm_password" required minlength="8" autocomplete="new-password"></label><button class="btn primary full" type="submit">Reset password</button><p class="form-message" id="resetMessage"></p></form><p class="privacy-note">Records are saved locally. Configure optional cloud sync and email settings to keep an online copy and reset passwords by email.</p>
+  </div><p class="auth-foot">Business OS · Local-first business management</p>
+</div>
+<div id="appShell" class="app-shell" hidden>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="logo">B</div><div><strong id="brandBusiness">Business OS</strong><small id="brandType">BUSINESS WORKSPACE</small></div></div>
+    <div class="workspace"><div class="workspace-avatar" id="ownerAvatar">B</div><div class="workspace-info"><strong id="sideBusiness">My business</strong><small id="sideOwner">Owner workspace</small></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav class="navigation" aria-label="Main navigation">
+      <button class="nav-link active" data-tab="overview"><span>◫</span> Overview</button>
+      <button class="nav-link" data-tab="inventory"><span>▦</span> Inventory & items</button>
+      <button class="nav-link" data-tab="sales"><span>↗</span> Sales / Checkout</button>
+      <button class="nav-link" data-tab="expenses"><span>⇄</span> Expenses</button>
+      <button class="nav-link" data-tab="analytics"><span>▥</span> Profit & analytics</button>
+      <button class="nav-link" data-tab="assistant"><span>✳</span> AI assistant <span class="ai-badge">AI</span></button>
+      <button class="nav-link" data-tab="settings"><span>⚙</span> Settings & backup</button>
+    </nav>
+    <div class="sidebar-bottom"><div class="local-status"><i></i><span>Saved on this computer</span></div><button id="logoutBtn" class="btn subtle full">Log out</button></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><button id="mobileMenu" class="icon-btn mobile-only" aria-label="Open navigation">☰</button><div><div class="crumb">BUSINESS OS <span>/</span> <strong id="pageTitle">Overview</strong></div><div class="date-line" id="today"></div></div><div class="top-actions"><button id="themeToggle" class="btn outline">☼ Light mode</button><span class="user-pill" id="topBusiness">My business</span></div></header>
+    <section class="tab-panel active" id="tab-overview">
+      <div class="welcome"><div><div class="eyebrow">YOUR BUSINESS AT A GLANCE</div><h1>Good to see you, <span id="welcomeOwner">Owner</span>.</h1><p>Here is what is happening across your business.</p></div><button class="btn primary" data-go-tab="sales">＋ Record a sale</button></div>
+      <div class="stats-grid">
+        <article class="stat-card"><span>Total revenue</span><strong id="kpiRevenue">RWF 0</strong><small>All recorded sales</small></article>
+        <article class="stat-card"><span>Gross profit</span><strong id="kpiGross">RWF 0</strong><small>Revenue less cost of goods sold</small></article>
+        <article class="stat-card"><span>Net profit estimate</span><strong id="kpiProfit">RWF 0</strong><small>Gross profit less recorded expenses</small></article>
+        <article class="stat-card"><span>Stock on hand</span><strong id="kpiStock">0</strong><small><span id="kpiProducts">0</span> products registered</small></article>
+      </div>
+      <div class="content-grid">
+        <article class="panel"><div class="panel-head"><div><h2>Inventory watch</h2><p>Items that need replenishment</p></div><button class="text-btn" data-go-tab="inventory">Manage stock →</button></div><div id="lowStockList" class="list"></div></article>
+        <article class="panel"><div class="panel-head"><div><h2>Recent sales</h2><p>Latest recorded transactions</p></div><button class="text-btn" data-go-tab="sales">All sales →</button></div><div id="recentSales" class="list"></div></article>
+      </div>
+      <article class="panel"><div class="panel-head"><div><h2>Quick actions</h2><p>Jump straight into the work</p></div></div><div class="quick-grid"><button class="quick-action" data-go-tab="inventory"><b>＋</b><strong>Add item to sell</strong><span>Set price, cost and stock</span></button><button class="quick-action" data-go-tab="sales"><b>↗</b><strong>Checkout / sale</strong><span>Sell items and reduce stock</span></button><button class="quick-action" data-go-tab="expenses"><b>−</b><strong>Record expense</strong><span>Track operating costs</span></button><button class="quick-action" data-go-tab="assistant"><b>✳</b><strong>Ask business AI</strong><span>Analyze your actual records</span></button></div></article>
+    </section>
+    <section class="tab-panel" id="tab-inventory">
+      <div class="page-heading"><div><div class="eyebrow">PRODUCT CATALOGUE</div><h1>Inventory & items</h1><p>Add items to sell, maintain stock levels, and track margin per item.</p></div></div>
+      <article class="panel"><div class="panel-head"><div><h2>Product catalogue</h2><p>Add, update and manage the items you sell.</p></div><button id="openProductModal" class="btn primary" type="button">＋ Register item</button></div>
+        <p class="hint-block">Use “Register item” to open the item form separately. Your product list stays here.</p>
+      </article>
+      <article class="panel"><div class="panel-head"><div><h2>Your products</h2><p>Stock and pricing for every item.</p></div><input id="productSearch" class="search" placeholder="Search products…"></div><div class="table-wrap"><table><thead><tr><th>Item</th><th>Category</th><th>Stock</th><th>Cost</th><th>Price</th><th>Margin / unit</th><th>Status</th><th>Actions</th></tr></thead><tbody id="productsTable"></tbody></table></div></article>
+    </section>
+    <div id="productModal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+      <div class="modal-card"><div class="modal-head"><div><div class="eyebrow">PRODUCT CATALOGUE</div><h2 id="productModalTitle">Register an item</h2><p>Add or update an item, its stock and prices.</p></div><button type="button" class="icon-btn" data-close-modal="productModal" aria-label="Close">×</button></div>
+        <form id="productModalForm" class="form-grid"><input type="hidden" name="id">
+          <label>Product name *<input name="name" required maxlength="160" placeholder="e.g. Rice 1 kg"></label>
+          <label>Barcode / item code<input id="productBarcode" name="sku" maxlength="80" autocomplete="off" placeholder="Scan barcode or type code"><small class="field-help">Most USB/Bluetooth scanners type the barcode here. Leave blank to create an item code automatically.</small></label>
+          <label>Category<input name="category" maxlength="100" placeholder="e.g. Food, Drinks"></label>
+          <label>Opening stock *<input name="quantity" type="number" min="0" step="1" value="0" required></label>
+          <label>Cost price per unit *<input name="cost_price" type="number" min="0" step="0.01" required value="0"></label>
+          <label>Selling price per unit *<input name="selling_price" type="number" min="0" step="0.01" required value="0"></label>
+          <label>Low-stock alert at<input name="min_stock" type="number" min="0" step="1" value="5"></label>
+          <div class="form-submit"><button class="btn primary" type="submit" id="saveProductBtn">Save item</button><button class="btn outline" type="button" data-close-modal="productModal">Cancel</button><p class="form-message" id="productModalMessage"></p></div>
+        </form>
+      </div>
+    </div>
+    <section class="tab-panel" id="tab-sales">
+      <div class="page-heading"><div><div class="eyebrow">POINT OF SALE</div><h1>Sales / Checkout</h1><p>Choose a product and quantity. Stock and profit update automatically.</p></div></div>
+      <article class="panel"><div class="panel-head"><div><h2>Record a sale</h2><p>Sales are saved with the cost at the time of sale.</p></div></div><form id="saleForm" class="form-grid">
+        <label>Find item by name or barcode<input id="saleLookup" list="saleLookupOptions" autocomplete="off" placeholder="Scan barcode or type item name"><datalist id="saleLookupOptions"></datalist><small class="field-help">Scan the same barcode at checkout, or type part of the item name.</small></label>
+        <label>Product *<select id="saleProduct" name="product_id" required><option value="">Register items first</option></select></label>
+        <label>Quantity *<input id="saleQuantity" name="quantity" type="number" min="1" step="1" value="1" required></label>
+        <div class="sale-preview"><span>Sale total</span><strong id="salePreview">RWF 0</strong><small id="saleMargin">Estimated gross profit: RWF 0</small></div>
+        <div class="form-submit"><button class="btn primary" type="submit">Complete sale</button><p class="form-message" id="saleMessage"></p></div>
+      </form></article>
+      <article class="panel"><div class="panel-head"><div><h2>Recent transactions</h2><p>Most recent sales on this account.</p></div></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Product</th><th>Quantity</th><th>Unit price</th><th>Sales total</th><th>Gross profit</th></tr></thead><tbody id="salesTable"></tbody></table></div></article>
+    </section>
+    <section class="tab-panel" id="tab-expenses">
+      <div class="page-heading"><div><div class="eyebrow">COST CONTROL</div><h1>Business expenses</h1><p>Record rent, transport, utilities, wages and other operating costs.</p></div></div>
+      <article class="panel"><div class="panel-head"><div><h2>Add an expense</h2><p>Expenses are included in the net profit estimate.</p></div></div><form id="expenseForm" class="form-grid">
+        <label>Category *<select name="category" required><option>General</option><option>Rent</option><option>Wages</option><option>Transport</option><option>Utilities</option><option>Packaging</option><option>Marketing</option><option>Repairs</option><option>Taxes / fees</option><option>Other</option></select></label>
+        <label>Description *<input name="description" maxlength="200" required placeholder="e.g. Electricity bill"></label>
+        <label>Amount *<input name="amount" type="number" min="0.01" step="0.01" required placeholder="0"></label>
+        <div class="form-submit"><button class="btn primary" type="submit">Save expense</button><p class="form-message" id="expenseMessage"></p></div>
+      </form></article>
+      <article class="panel"><div class="panel-head"><div><h2>Expense history</h2><p>All recorded operating costs.</p></div><strong id="expenseTotal">RWF 0</strong></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th></tr></thead><tbody id="expensesTable"></tbody></table></div></article>
+    </section>
+    <section class="tab-panel" id="tab-analytics">
+      <div class="page-heading"><div><div class="eyebrow">FINANCIAL HEALTH</div><h1>Profit & analytics</h1><p>Know sales, product costs, operating expenses and estimated profit.</p></div><button id="refreshBtn" class="btn outline">↻ Refresh</button></div>
+      <div class="stats-grid four"><article class="stat-card"><span>Revenue</span><strong id="anRevenue">RWF 0</strong></article><article class="stat-card"><span>Cost of goods sold</span><strong id="anCogs">RWF 0</strong></article><article class="stat-card"><span>Gross profit</span><strong id="anGross">RWF 0</strong></article><article class="stat-card"><span>Operating expenses</span><strong id="anExpenses">RWF 0</strong></article></div>
+      <article class="panel"><div class="panel-head"><div><h2>Profit summary</h2><p>Calculated from saved transactions, not projections.</p></div></div><div class="profit-summary"><div><span>Total revenue</span><strong id="sumRevenue">RWF 0</strong></div><div><span>Less cost of goods sold</span><strong id="sumCogs">RWF 0</strong></div><div><span>Gross profit</span><strong id="sumGross">RWF 0</strong></div><div><span>Less expenses</span><strong id="sumExpenses">RWF 0</strong></div><div class="net-line"><span>Estimated net profit</span><strong id="sumNet">RWF 0</strong></div></div><p class="hint-block">Profit estimate = sales revenue − recorded cost of goods sold − recorded operating expenses. It does not include taxes, unpaid bills or unrecorded costs. Add all expenses for a more accurate figure.</p></article>
+    </section>
+    <section class="tab-panel" id="tab-assistant">
+      <div class="page-heading"><div><div class="eyebrow">BUSINESS INTELLIGENCE</div><h1>AI business assistant</h1><p>Ask questions about your saved stock, sales, costs and profits.</p></div></div>
+      <article class="panel ai-workspace"><div class="ai-provider-note"><span class="ai-dot"></span><div><strong>Your business assistant is ready</strong><p>AI responses use the current account's business records as context. The assistant can analyze the business records saved in this workspace.</p></div></div>
+        <div class="suggestions"><button class="chip" data-prompt="Summarize my current business performance using my actual records.">Summarize performance</button><button class="chip" data-prompt="Which products are low in stock and what should I reorder first?">Stock reorder advice</button><button class="chip" data-prompt="Analyze my product margins and suggest ways to improve profitability.">Improve margins</button><button class="chip" data-prompt="Explain my sales, cost of goods sold, expenses and estimated net profit.">Explain my profit</button></div>
+        <div id="chatMessages" class="chat-messages"><div class="chat-empty">Your business assistant is ready. Ask a question to get started.</div></div>
+        <form id="chatForm" class="chat-form"><textarea id="chatInput" rows="2" maxlength="4000" required placeholder="Ask about your business data…"></textarea><button class="btn primary" type="submit">Ask AI ↑</button></form><p class="hint-block">Privacy: the backend sends business data needed for your question to the AI assistant connection. Only send information you are comfortable sharing with the connected AI service.</p>
+      </article>
+    </section>
+    <section class="tab-panel" id="tab-settings">
+      <div class="page-heading"><div><div class="eyebrow">PREFERENCES & DATA</div><h1>Settings & backup</h1><p>Customize your workspace and protect your local records.</p></div></div>
+      <article class="panel"><div class="panel-head"><div><h2>Workspace</h2><p>Account details for the current business.</p></div></div><div class="settings-grid"><div><span>Business name</span><strong id="settingsBusiness">—</strong></div><div><span>Business type</span><strong id="settingsType">—</strong></div><div><span>Account email</span><strong id="settingsEmail">—</strong></div><div><span>Data storage</span><strong>Saved on this computer + optional online backup</strong></div></div></article>
+      <article class="panel"><div class="panel-head"><div><h2>Business details</h2><p>Change the name and information shown throughout your app.</p></div></div><form id="businessProfileForm" class="form-grid">
+        <label>Owner / contact name<input name="owner_name" id="profileOwnerName" required maxlength="100"></label>
+        <label>Business name<input name="business_name" id="profileBusinessName" required maxlength="120"></label>
+        <label>Business type<select name="business_type" id="profileBusinessType" required><option>Supermarket / Grocery</option><option>Retail shop</option><option>Wholesale</option><option>Restaurant / Cafe</option><option>Pharmacy</option><option>Clothing store</option><option>Hardware store</option><option>Salon / Beauty</option><option>Services</option><option>Other</option></select></label>
+        <label>Currency<select name="currency" id="currencySelect" required></select><small class="field-help">Choose the currency used to display prices in this workspace.</small></label>
+        <div class="form-submit"><button class="btn primary" type="submit">Save business details</button><p id="businessProfileMessage" class="form-message"></p></div>
+      </form></article>
+      <article class="panel"><div class="panel-head"><div><h2>Account security</h2><p>Change your password while signed in.</p></div></div><form id="changePasswordForm" class="form-grid"><label>Current password<input type="password" name="current_password" required autocomplete="current-password"></label><label>New password<input type="password" name="new_password" required minlength="8" autocomplete="new-password"></label><label>Confirm new password<input type="password" name="confirm_password" required minlength="8" autocomplete="new-password"></label><div class="form-submit"><button class="btn primary" type="submit">Update password</button><p id="changePasswordMessage" class="form-message"></p></div></form><p class="hint-block">Forgot your password? Log out and use “Forgot your password?” on the login screen. Email password reset must be enabled by the person who installed your app. You can change your password here while signed in.</p></article>
+      <article class="panel"><div class="panel-head"><div><h2>Appearance</h2><p>Switch between light and dark themes at any time.</p></div></div><div class="settings-row"><span>Color theme</span><button id="settingsThemeToggle" class="btn outline">Switch theme</button></div></article>
+      <article class="panel"><div class="panel-head"><div><h2>Export a backup</h2><p>Download a JSON copy of this account's products and transactions.</p></div></div><button id="exportBtn" class="btn primary">↓ Export my business data</button><p id="exportMessage" class="form-message"></p><p class="hint-block">Your records are saved on this computer. Keep a backup copy of your business data, and use the export above to make a portable backup.</p></article>
+      <article class="panel"><div class="panel-head"><div><h2>AI assistant connection</h2><p>The AI assistant needs an active internet connection and a configured AI account.</p></div></div><p class="settings-copy">If the assistant cannot answer, ask the person who set up your app to check the AI connection. Your stock, sales and expenses can still be managed without AI.</p></article>
+    </section>
+    <footer class="footer"><span id="footerBusiness">Business OS</span><span>Your business records stay on this PC</span></footer>
+  </main>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body></html>
